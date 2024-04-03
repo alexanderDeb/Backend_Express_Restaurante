@@ -6,7 +6,7 @@ const productSchema = new mongoose.Schema(
     precio: { type: String, require: true },
     status: { type: Boolean, require: true },
   },
-  { timestamps: true }
+  { timestamps: true, versionKey: false  }
 );
 
 export default mongoose.model("Product", productSchema);

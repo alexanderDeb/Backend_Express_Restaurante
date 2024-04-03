@@ -21,7 +21,7 @@ export const register = async (req, res) => {
       role: userSave.role,
     });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(400).json({ message: error.message });
   }
 };
 
@@ -38,7 +38,13 @@ export const login = async (req, res) => {
 
     const token = await createAccessToken({ id: userFound._id });
     res.cookie("token", token);
-    res.json({ id: userFound._id, email: userFound.email });
+    res.json({
+      id: userFound._id,
+      email: userFound.email,
+      status: userFound.status,
+      name: userFound.name,
+      token: token,
+    });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

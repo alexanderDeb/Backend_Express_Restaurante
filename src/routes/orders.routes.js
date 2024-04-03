@@ -11,9 +11,9 @@ import {
 const router = Router();
 
 router.get("/orders", authRequired, getOrders);
-router.get("/order/:id", authRequired, getOrder);
-router.post("/order", authRequired, createOrder);
-router.delete("/order/:id", authRequired, deleteOrder);
-router.put("/order/:id", authRequired, updateOrder);
+router.get("/orders/:id", authRequired, getOrder);
+router.post("/orders", authRequired, createOrder);
+router.delete("/orders/:id", authRequired, deleteOrder);
+router.put("/orders/:id", authRequired, updateOrder);
 
 export default router;

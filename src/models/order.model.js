@@ -2,13 +2,13 @@ import mongoose from "mongoose";
 
 const orderSchema = new mongoose.Schema(
   {
-    userid: { type: String, require: true },
+    user: { type: mongoose.Types.ObjectId, require: true },
     mesa: { type: String, require: true },
-    productosid: { type: Array, require: true },
+    productosid: { type: [{ type: mongoose.Types.ObjectId, ref: "productosid" }]},
     nota: { type: String },
     total: { type: String, require: true },
   },
-  { timestamps: true }
+  { timestamps: true, versionKey: false }
 );
 
 export default mongoose.model("Order", orderSchema);

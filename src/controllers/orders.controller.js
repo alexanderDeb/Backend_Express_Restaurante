@@ -1,20 +1,65 @@
+import mongoose from "mongoose";
 import Order from "../models/order.model.js";
 
 export const getOrders = async (req, res) => {
-  const orders = await Order.find();
+  const orders = await Order.aggregate([
+    {
+      $lookup: {
+        from: "users",
+        localField: "user",
+        foreignField: "_id",
+        as: "userOrder",
+      },
+    },
+    { $unwind: "$userOrder" },
+    {
+      $lookup: {
+        from: "products",
+        localField: "productosid",
+        foreignField: "_id",
+        as: "productsOrder",
+      },
+    },
+  ]);
   res.json(orders);
 };
 
 export const getOrder = async (req, res) => {
-  const order = await Order.findById(req.params.id);
+  const order = await Order.aggregate([
+    {
+      $lookup: {
+        from: "users",
+        localField: "user",
+        foreignField: "_id",
+        as: "userOrder",
+      },
+    },
+    { $unwind: "$userOrder" },
+    {
+      $lookup: {
+        from: "products",
+        localField: "productosid",
+        foreignField: "_id",
+        as: "productsOrder",
+      },
+    },
+    { $match: { _id: new mongoose.Types.ObjectId(req.params.id) } },
+  ]);
   if (!order) return res.status(404).json({ message: "Orden no encontrada" });
   res.json(order);
 };
 
 export const createOrder = async (req, res) => {
-  const { userid, mesa, productosid, nota, total } = req.body;
-  const newOrder = new Order({ userid, mesa, productosid, nota, total });
-  const saveOrder = await newOrder.save();
+  const { user, mesa, productosid, nota, total } = req.body;
+  const NewOrder = new Order({
+    user: new mongoose.Types.ObjectId(user),
+    mesa: mesa,
+    productosid: productosid,
+    nota: nota,
+    total: total,
+  });
+  console.log(NewOrder);
+  const saveOrder = await NewOrder.save();
   res.json(saveOrder);
 };
 
